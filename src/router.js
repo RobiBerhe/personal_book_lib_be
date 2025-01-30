@@ -7,8 +7,8 @@ router.use("/api", routes());
 
 
 function routes() {
-    router.use('/books', require('./book_routes'));
-    router.use("/users",require("./auth_routes"))
+    router.use('/books', require('./routes/book_routes'));
+    router.use("/users",require("./routes/auth_routes"))
     return router;
 }
 
