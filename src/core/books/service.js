@@ -2,7 +2,6 @@ const Book = require("./model")
 const mongoose = require("mongoose")
 
 async function createBook({title, author, isbn, read, rating,userId}) {
-    // check to see if book exists via it's isbn
     const book = await Book.findOne({isbn});
     if(book) {
         return {error: "Book already exists",data:null};
@@ -39,7 +38,6 @@ async function getBooks(filter,{page,limit}) {
     if(!limit) {
         limit = 5;
     }
-    console.log("page :> ",page, " and limit :> ",limit);
     const books = await Book.paginate({...filter},{limit:limit,page:page});
     return {data:books,error:null};
 }
@@ -50,7 +48,6 @@ async function getBook(bookId,userId) {
     if(!book) {
         return {data:null,error:"Book not found"};
     }
-    console.log("book :?>>>>>>>>> ",book);
     return {data:book,error:null};
 }
 

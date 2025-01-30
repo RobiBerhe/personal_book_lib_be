@@ -15,7 +15,6 @@ async function createBook(req, res) {
         if (error) {
             return res.status(400).json({error: {message:error}});
         }
-        console.log("book :> ",data);
         return res.json({book:data});
     }catch(error) {
         console.log("error [createBook] :> ",error);;
@@ -28,7 +27,6 @@ async function createBook(req, res) {
 function deleteBook(req, res) {
     try {
         const {id} = req.params;
-        console.log("deleting book :> ",id);
         const {_, error} = service.deleteBook(id);
         if (error) {
             return res.status(400).json({error: {message:error}});
@@ -59,14 +57,12 @@ async function updateBook(req, res) {
 
 
 async function getBook(req, res) {
-    console.log("getting book :> ",req.params);
     const {id} = req.params;
     userId = req.user.id;
     const {data,error} = await service.getBook(id,userId); 
     if (error) {
         return res.status(400).json({error: {message:error}});
     }
-    console.log("book :> ",data);
     return res.json({book:data});
 }
 async function getBooks(req, res) {
@@ -76,7 +72,6 @@ async function getBooks(req, res) {
     if (error) {
         return res.status(400).json({error: {message:error}});
     }
-    console.log("books :> ",data);
     return res.json({books:data});
 }
 
@@ -87,7 +82,6 @@ async function getBooksStats(req,res){
     if (error) {
         return res.status(400).json({error: {message:error}});
     }
-    console.log("books stats :> ",data);
     return res.json({booksStats:data});
 }
 

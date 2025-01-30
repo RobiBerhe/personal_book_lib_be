@@ -5,7 +5,6 @@ const jsonwebtoken = require("jsonwebtoken")
 async function createUser({fullName, username, email, password}){
    try {
     const usernameTaken = await User.exists({username})
-    console.log("user exists :> ",usernameTaken)
     if(usernameTaken){
         return {error:"username already taken",data:null}
     } 
@@ -16,7 +15,6 @@ async function createUser({fullName, username, email, password}){
     userPassword = await argon2.hash(password)
 
     const user = await User.create({fullName,email,password:userPassword,username})
-    console.log("user saved:> ",user)
     const data = {fullName:user.fullName,email:user.email,username:user.username}
     const token = jsonwebtoken.sign(data,process.env.JWT_SECRET)
 
