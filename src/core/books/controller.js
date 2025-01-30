@@ -40,32 +40,43 @@ function deleteBook(req, res) {
 
 
 async function updateBook(req, res) {
-    const {body} = req;
-    const validation = updateBookSchema.validate(body);
-    if(validation.error) {
-        return res.status(400).json({message: validation.error.message});
+    try {
+        const {body} = req;
+        const validation = updateBookSchema.validate(body);
+        if(validation.error) {
+            return res.status(400).json({message: validation.error.message});
+        }
+        const {id} = req.params;
+        const user = req.user.id;
+        body.user = user;
+        const {data,error} = await service.updateBook(id,body);
+        if (error) {
+            return res.status(400).json({error: {message:error}});
+        }
+        res.json({book: data});
+    } catch (error) {
+        console.log("error [updateBook] :> ",error);
+        res.status(500).json({error: {message:error.message}});
     }
-    const {id} = req.params;
-    const user = req.user.id;
-    body.user = user;
-    const {data,error} = await service.updateBook(id,body);
-    if (error) {
-        return res.status(400).json({error: {message:error}});
-    }
-    res.json({book: data});
 }
 
 
 async function getBook(req, res) {
-    const {id} = req.params;
-    userId = req.user.id;
-    const {data,error} = await service.getBook(id,userId); 
-    if (error) {
-        return res.status(400).json({error: {message:error}});
-    }
-    return res.json({book:data});
+   try {
+        const {id} = req.params;
+        userId = req.user.id;
+        const {data,error} = await service.getBook(id,userId); 
+        if (error) {
+            return res.status(400).json({error: {message:error}});
+        }
+        return res.json({book:data});
+   } catch (error) {
+        console.log("error [getBook] :> ",error);
+        res.status(500).json({error: {message:error.message}});
+   }
 }
 async function getBooks(req, res) {
+  try {
     const {page,limit} = req.query;
     const user = req.user.id;
     const {data,error} = await service.getBooks({user},{page,limit});
@@ -73,16 +84,25 @@ async function getBooks(req, res) {
         return res.status(400).json({error: {message:error}});
     }
     return res.json({books:data});
+  } catch (error) {
+    console.log("getbooks",error);
+    res.status(500).json({error: {message:error.message}});
+  }
 }
 
 
 async function getBooksStats(req,res){
+  try {
     const user = req.user.id;
     const {data,error} = await service.getBooksStats(user);
     if (error) {
         return res.status(400).json({error: {message:error}});
     }
     return res.json({booksStats:data});
+  } catch (error) {
+        console.log("error [getbookstats] :> ",error);
+        res.status(500).json({error: {message:error.message}});
+  }
 }
 
 
